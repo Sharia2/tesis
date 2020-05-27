@@ -9,10 +9,12 @@ let db;
 MongoClient.connect(uri, function (err, client) {
     if (err) {
         console.log('Error occurred while connecting to MongoDB Atlas...\n', err);
-    }
+    }else{
     console.log('Connected...');
+    }
     db = client.db("datos");
     // perform actions on the collection object
+    
 });
 
 app.use(bodyParser.urlencoded({ extended: true }))
