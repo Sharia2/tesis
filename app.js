@@ -4,6 +4,7 @@ var app = express();
 
 const MongoClient = require('mongodb').MongoClient
 const uri ='mongodb+srv://sara-tesis:sar40rom45@tesis-qfte4.mongodb.net/test?retryWrites=true&w=majority'
+const PORT = process.env.PORT || 3000
 
 let db;
 MongoClient.connect(uri, function (err, client) {
@@ -32,6 +33,6 @@ app.post('/medicion', (req, res) => {
     })
 })
 
-app.listen(3000, function () {
+app.listen(PORT, function () {
     console.log('servidor iniciado 3000!');
 });
