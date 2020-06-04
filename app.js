@@ -25,6 +25,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/medicion', (req, res) => {
+    console.log(req.body);
     const obj1 = JSON.parse(req.body.objeto);
     const  {f:fecha, id, tc: temperaturaCorporal, ta: temperaturaAmbiente, h:humedad, la:latitud, lae:hemisferioLatitud, lo:longitud, loe:hemisferioLongitud} = obj1 ;
     const final = { fecha, id, temperaturaCorporal, temperaturaAmbiente, humedad, latitud, hemisferioLatitud,longitud,hemisferioLongitud};
