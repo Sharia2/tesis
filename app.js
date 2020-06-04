@@ -30,11 +30,14 @@ app.post('/medicion', (req, res) => {
     const final = { fecha, id, temperaturaCorporal, temperaturaAmbiente, humedad, latitud, hemisferioLatitud,longitud,hemisferioLongitud};
     db.collection('mediciones').insertOne(final, (err, result) => {
         if (err) return console.log(err)
-
         console.log('saved to database')
         res.send('dato guardado')
     })
-})
+});
+
+app.get('/medicion', (req, res) => {
+    res.send('Dani lo lograste');
+} );
 
 app.listen(PORT, function () {
     console.log('servidor iniciado 3000!');
