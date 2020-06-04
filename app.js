@@ -25,7 +25,10 @@ app.get('/', function (req, res) {
 });
 
 app.post('/medicion', (req, res) => {
-    db.collection('mediciones').insertOne(req.body, (err, result) => {
+    const obj1 = JSON.parse(req.body.objeto);
+    const  {f:fecha, id, tc: temperaturaCorporal, ta: temperaturaAmbiente, h:humedad, la:latitud, lae:hemisferioLatitud, lo:longitud, loe:hemisferioLongitud} = obj1 ;
+    const final = { fecha, id, temperaturaCorporal, temperaturaAmbiente, humedad, latitud, hemisferioLatitud,longitud,hemisferioLongitud};
+    db.collection('mediciones').insertOne(final, (err, result) => {
         if (err) return console.log(err)
 
         console.log('saved to database')
