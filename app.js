@@ -26,7 +26,7 @@ app.get('/', function (req, res) {
 
 app.post('/medicion', (req, res) => {
     console.log(req.body);
-    const obj1 = JSON.parse(req.body.objeto);
+    const obj1 = JSON.parse(Object.keys(req.body)[0]);
     const  {f:fecha, id, tc: temperaturaCorporal, ta: temperaturaAmbiente, h:humedad, la:latitud, lae:hemisferioLatitud, lo:longitud, loe:hemisferioLongitud} = obj1 ;
     const final = { fecha, id, temperaturaCorporal, temperaturaAmbiente, humedad, latitud, hemisferioLatitud,longitud,hemisferioLongitud};
     db.collection('mediciones').insertOne(final, (err, result) => {
@@ -42,4 +42,4 @@ app.get('/medicion', (req, res) => {
 
 app.listen(PORT, function () {
     console.log('servidor iniciado 3000!');
-});
+}); 
