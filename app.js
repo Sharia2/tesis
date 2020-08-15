@@ -30,14 +30,17 @@ app.post('/medicion', (req, res) => {
     const  {f:fecha, id, tc: temperaturaCorporal, ta: temperaturaAmbiente, h:humedad, la:latitud, lae:hemisferioLatitud, lo:longitud, loe:hemisferioLongitud} = obj1 ;
     const final = { fecha, id, temperaturaCorporal, temperaturaAmbiente, humedad, latitud, hemisferioLatitud,longitud,hemisferioLongitud};
     db.collection('mediciones').insertOne(final, (err, result) => {
-        if (err) return console.log(err)
+        if (err) return console.log(err)        
         console.log('saved to database')
         res.send('dato guardado')
     })
 });
 
 app.get('/medicion', (req, res) => {
-    res.send('Dani lo lograste');
+    db.collection('mediciones').find({}).toArray().then(data=>{
+        res.send(JSON.stringify(data));
+        res.send("Holiii");
+    })
 } );
 
 app.listen(PORT, function () {
