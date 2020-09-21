@@ -20,6 +20,12 @@ MongoClient.connect(uri, function (err, client) {
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 app.get('/', function (req, res) {
     res.send('Hello World!');
 });
@@ -39,10 +45,10 @@ app.post('/medicion', (req, res) => {
 app.get('/medicion', (req, res) => {
     db.collection('mediciones').find({}).toArray().then(data=>{
         res.send(JSON.stringify(data));
-        res.send("Holiii");
     })
 } );
 
 app.listen(PORT, function () {
     console.log('servidor iniciado 3000!');
 }); 
+
