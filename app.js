@@ -1,5 +1,6 @@
 var express = require('express');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const { restart } = require('nodemon');
 var app = express();
 
 const MongoClient = require('mongodb').MongoClient
@@ -35,12 +36,24 @@ app.post('/medicion', (req, res) => {
     const obj1 = JSON.parse(Object.keys(req.body)[0]);
     const  {f:fecha, id, tc: temperaturaCorporal, ta: temperaturaAmbiente, h:humedad, la:latitud, lae:hemisferioLatitud, lo:longitud, loe:hemisferioLongitud} = obj1 ;
     const final = { fecha, id, temperaturaCorporal, temperaturaAmbiente, humedad, latitud, hemisferioLatitud,longitud,hemisferioLongitud};
-    db.collection('mediciones').insertOne(final, (err, result) => {
-        if (err) return console.log(err)        
-        console.log('saved to database')
-        res.send('dato guardado')
-    })
-});
+    db.listCollections().toArray().then(collectionsInfo => {
+        const collections = collectionsInfo.map(collection => collection.name)
+        if (collections.includes(id)) {
+            res.send("Primer camino")
+            db.collection(`${id}`).insertOne(final, (err, result) => {
+                if (err) return console.log(err)
+                res.send('dato guardado en coleccion existente')
+            })
+        } else {
+            db.createCollection(`${id}`).then( () => {
+                db.collection(`${id}`).insertOne(final, (err, result) => {
+                    if (err) return console.log(err)
+                    res.send('dato guardado en coleccion nueva')
+                })
+            } )
+        }
+    });
+    });
 
 app.get('/medicion', (req, res) => {
     db.collection('mediciones').find({}).toArray().then(data=>{
