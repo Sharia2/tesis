@@ -56,9 +56,19 @@ app.post('/medicion', (req, res) => {
     });
 
 app.get('/medicion', (req, res) => {
-    db.collection('mediciones').find({}).toArray().then(data=>{
-        res.send(JSON.stringify(data));
-    })
+    db.listCollections().toArray().then(collectionsInfo => {
+    const collections = collectionsInfo.map(collection => collection.name)
+    const result = {};
+    let count = 0; 
+    collections.forEach(async (collection, index, array) => {
+        const data = await db.collection(collection).find({}).toArray()        
+        result[collection] = data;
+        count++ 
+        if(array.length  === count ){
+            res.send(JSON.stringify(result));
+        }
+    });
+    });
 } );
 
 app.listen(PORT, function () {
