@@ -35,25 +35,14 @@ app.post('/medicion', (req, res) => {
     console.log(req.body);
     const obj1 = JSON.parse(Object.keys(req.body)[0]);
     const  {f:fecha, id, tc: temperaturaCorporal, ta: temperaturaAmbiente, h:humedad, la:latitud, lae:hemisferioLatitud, lo:longitud, loe:hemisferioLongitud} = obj1 ;
-    const final = { fecha, id, temperaturaCorporal, temperaturaAmbiente, humedad, latitud, hemisferioLatitud,longitud,hemisferioLongitud};
-    db.listCollections().toArray().then(collectionsInfo => {
-        const collections = collectionsInfo.map(collection => collection.name)
-        if (collections.includes(id)) {
-            res.send("Primer camino")
-            db.collection(`${id}`).insertOne(final, (err, result) => {
-                if (err) return console.log(err)
-                res.send('dato guardado en coleccion existente')
-            })
-        } else {
-            db.createCollection(`${id}`).then( () => {
-                db.collection(`${id}`).insertOne(final, (err, result) => {
-                    if (err) return console.log(err)
-                    res.send('dato guardado en coleccion nueva')
-                })
-            } )
-        }
-    });
-    });
+    const final = { fecha, id, temperaturaCorporal, temperaturaAmbiente, humedad, latitud, hemisferioLatitud,longitud,hemisferioLongitud};     
+    db.createCollection(`${id}`).then( () => {
+    db.collection(`${id}`).insertOne(final, (err, result) => {
+        if (err) return console.log(err)
+            res.send('dato guardado')
+        })
+    } )    
+});
 
 app.get('/medicion', (req, res) => {
     db.listCollections().toArray().then(collectionsInfo => {
